@@ -1,0 +1,78 @@
+import { useCallback } from "react";
+import { AiOutlineClose } from "react-icons/ai";
+import Button from "./Button";
+
+interface ModalProps{
+  isOpen?: boolean;
+  onClose: ()=>void;
+  onSubmit: ()=>void;
+  title?: string;
+  body?: React.ReactElement;
+  footer?: React.ReactElement;
+  actionLabel:string;
+  disabled?:boolean;
+}
+const Model:React.FC<ModalProps> = ({
+  isOpen,
+  onClose,
+  onSubmit,
+  title,
+  body,
+  footer, 
+  actionLabel,
+  disabled
+}) => {
+  const handelClosed = useCallback(()=>{
+    if(disabled){
+      return;
+    }
+    onClose();
+  },[disabled , onClose])
+  const handelSubmit = useCallback(()=>{
+    if(disabled){
+      return;
+    }
+    onSubmit();
+  }, [disabled , onSubmit])
+
+  if(!isOpen){
+    return null;
+  }
+  return (
+    <>
+    <div className="
+    flex justify-center items-center fixed overflow-x-hidden overflow-y-auto inset-0
+    z-50 outline-none bg-neutral-800 bg-opacity-50">
+      <div className='relative w-full lg:w-1/2 my-6 mx-auto lg:max-w-3xl h-full lg:h-auto'>
+        <div className='h-full lg:h-auto border-0 rounded-lg shadow-lg relative
+         flex flex-col w-full bg-black outline-none focus:outline-none p-6'>
+          {/* Header */}
+          <div className='flex items-center justify-between p-10 rounded-t'>
+            <h3 className='text-3xl font-semibold text-white'>{title}</h3>
+            <button className="p-1 ml-auto border-0 text-white hover:opacity-70 transition" onClick={handelClosed}>
+              <AiOutlineClose size={20} />
+            </button>
+          </div>
+          {/* Body */}
+          {body}
+          <div className="relative p-10 flex-auto">
+            {/* footer */}
+              {footer}
+            <div className="flex flex-col gap-2 p-10">
+              <Button 
+              disabled={disabled} 
+              label={actionLabel} 
+              secondary 
+              fullWidth
+              large
+              onClick={handelSubmit}/>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    </>
+  )
+}
+
+export default Model
